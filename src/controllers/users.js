@@ -45,12 +45,20 @@ module.exports = {
           if (!resCompare) return helpers.response(res, null, 'Password wrong!', 401, null)
           const payload = {
             id: user.id,
-            email: user.email
+            email: user.email,
+            roleId: user.roleId
           }
 
           jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '3h' }, (_err, token) => {
             user.token = token
             delete user.password
+            delete user.pin
+
+            if (user.roleId === 1) {
+              user.roleId = 'Admin'
+            } else {
+              user.roleId = 'User'
+            }
             helpers.response(res, null, user, 200)
           })
         })
@@ -116,6 +124,10 @@ module.exports = {
       .then((result) => {
         console.log(result)
         if (result != '') {
+          result.map((item) => {
+            delete item.password
+            delete item.pin
+          })
           helpers.response(res, null, result, 200, null)
         } else {
           helpers.response(res, null, 'User not found', 404, 'error')
@@ -128,13 +140,110 @@ module.exports = {
 
   getAllUser: (req, res) => {
     const search = req.query.search
-    modelUser.getAllUser(search)
+    const sort = req.query.sort
+    const order = req.query.order
+    const page = req.query.page
+    const limit = req.query.limit
+    modelUser.getAllUser(search, sort, order, page, limit)
+      .then((result) => {
+        console.log(result)
+        if (result != '') {
+          result.map((item) => {
+            delete item.password
+            delete item.pin
+          })
+          helpers.response(res, page, result, 200, null)
+        } else {
+          helpers.response(res, null, 'User not found', 404, 'error')
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  },
+
+  setPin: (req, res) => {
+    const id = req.params.id
+    const { pin } = req.body
+    const data = {
+      pin
+    }
+
+    modelUser.setPin(id, data)
+      .then((result) => {
+        helpers.response(res, null, result, 200, null)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  },
+
+  confirmPin: (req, res) => {
+    const id = req.params.id
+    const { pin } = req.body
+    const data = {
+      pin
+    }
+    modelUser.confirmPin(id, data)
       .then((result) => {
         console.log(result)
         if (result != '') {
           helpers.response(res, null, result, 200, null)
         } else {
           helpers.response(res, null, 'User not found', 404, 'error')
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  },
+
+  increaseSaldo: (req, res) => {
+    const id = req.params.id
+    const { saldo } = req.body
+    const data = {
+      saldo
+    }
+    modelUser.increaseSaldo(id, data)
+      .then((result) => {
+        if (result == 'User not found') {
+          helpers.response(res, null, result, 404, 'Not Found')
+        } else {
+          helpers.response(res, null, result, 200, null)
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  },
+
+  decreaseSaldo: (req, res) => {
+    const id = req.params.id
+    const { saldo } = req.body
+    const data = {
+      saldo
+    }
+    modelUser.decreaseSaldo(id, data)
+      .then((result) => {
+        if (result == 'User not found') {
+          helpers.response(res, null, result, 404, 'Not Found')
+        } else {
+          helpers.response(res, null, result, 200, null)
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  },
+
+  deleteUser: (req, res) => {
+    const id = req.params.id
+    modelUser.deleteUser(id)
+      .then((result) => {
+        if (result == 'User not found') {
+          helpers.response(res, null, result, 404, 'Not Found')
+        } else {
+          helpers.response(res, null, result, 200, null)
         }
       })
       .catch((err) => {
