@@ -118,6 +118,24 @@ module.exports = {
     })
   },
 
+  pinOTP: (id, data) => {
+    return new Promise((resolve, reject) => {
+      connection.query('UPDATE users SET ? WHERE id = ?', [data, id], (err, result) => {
+        if (!err) {
+          connection.query('SELECT * FROM users WHERE id = ?', id, (err, result) => {
+            if (!err) {
+              resolve(result)
+            } else {
+              resolve('OTP Gagal')
+            }
+          })
+        } else {
+          reject(new Error(err))
+        }
+      })
+    })
+  },
+
   confirmPin: (id, data) => {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM users WHERE id = ?', id, (err, result) => {
@@ -140,7 +158,6 @@ module.exports = {
         if (!err) {
           let totalSaldo = 0
           totalSaldo += (Number(data.saldo) + Number(result[0].saldo))
-          // console.log(totalSaldo)
           connection.query(`UPDATE users SET saldo = ${totalSaldo} WHERE id = ?`, id, (err, result) => {
             if (!err) {
               resolve('Top Up success')

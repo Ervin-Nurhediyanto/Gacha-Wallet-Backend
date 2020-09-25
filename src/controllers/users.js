@@ -178,6 +178,35 @@ module.exports = {
       })
   },
 
+  pinOTP: (req, res) => {
+    const id = req.params.id
+    const pin1 = Math.floor(Math.random() * 10)
+    const pin2 = Math.floor(Math.random() * 10)
+    const pin3 = Math.floor(Math.random() * 10)
+    const pin4 = Math.floor(Math.random() * 10)
+    const pin5 = Math.floor(Math.random() * 10)
+    const pin6 = Math.floor(Math.random() * 10)
+    const pin = []
+
+    const inputPin = () => {
+      pin.push(pin1, pin2, pin3, pin4, pin5, pin6)
+    }
+
+    inputPin()
+    const pinOTP = pin.join('')
+    const data = {
+      pin: pinOTP
+    }
+
+    modelUser.pinOTP(id, data)
+      .then((result) => {
+        helpers.response(res, null, result, 200, null)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  },
+
   confirmPin: (req, res) => {
     const id = req.params.id
     const { pin } = req.body
