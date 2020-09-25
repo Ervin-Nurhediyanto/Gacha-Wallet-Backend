@@ -40,7 +40,7 @@ module.exports = {
           from: process.env.MAILER_EMAIL_ID,
           to: result[0].email,
           subject: 'OTP PIN',
-          html: `<p>OTP bersifat RAHASIA. Kode OTP verifikasi Anda: ${result[0].pin}. Jangan berikan OTP pada siapapun, termasuk pihak yang mengatasnamakan Gacha Wallet.</p>`
+          html: `<p>OTP bersifat RAHASIA. Kode OTP verifikasi Anda: <b>${result[0].pin}</b>. Jangan berikan OTP pada siapapun, termasuk pihak yang mengatasnamakan Gacha Wallet.</p>`
         }
 
         transporter.sendMail(mailOptions, (err, info) => {
