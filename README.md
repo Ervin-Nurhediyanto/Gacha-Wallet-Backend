@@ -1,4 +1,4 @@
-# Gache-Wallet-BackEnd
+# Gacha-Wallet-BackEnd
 
 Application to CRUD database with node js, Express, and MySql.
 This application use JWT to authentication and authorization,
@@ -6,7 +6,7 @@ and socket.io to real-time chat.
 
 ## Table of Contents
 
-- [Gache-Wallet-BackEnd](#gache-wallet-backend)
+- [Gacha-Wallet-BackEnd](#gacha-wallet-backend)
   - [Table of Contents](#table-of-contents)
   - [Built With](#built-with)
   - [Requirements](#requirements)
