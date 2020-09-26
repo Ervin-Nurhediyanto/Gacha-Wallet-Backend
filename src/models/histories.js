@@ -114,6 +114,25 @@ const histories = {
         }
       })
     })
+  },
+
+  transfer: (data) => {
+    return new Promise((resolve, reject) => {
+      connection.query('INSERT INTO histories SET ?', data, (err, result) => {
+        if (!err) {
+          connection.query('SELECT *, DATE_FORMAT(time, "%a") AS "day", DATE_FORMAT(time, "%Y") AS "year", DATE_FORMAT(time, "%b") AS "month", DATE_FORMAT(time, "%d") AS "date", DATE_FORMAT(time, "%H") AS "hour", DATE_FORMAT(time, "%i") AS "minutes", DATE_FORMAT(time, "%s") AS "seconds" FROM users INNER JOIN histories ON users.id = histories.idUser WHERE histories.idUser = ? ORDER BY histories.id DESC', data.idUser, (err, result) => {
+            if (!err) {
+              resolve(result[0])
+            } else {
+              reject(err)
+            }
+          })
+          // resolve('Transaction success')
+        } else {
+          reject(new Error(err))
+        }
+      })
+    })
   }
 }
 

@@ -1,6 +1,6 @@
 const express = require('express')
 const historiesController = require('../controllers/histories')
-// const transfer = require('../middlewares/transfer')
+const transfer = require('../middlewares/transfer')
 const router = express.Router()
 
 router
@@ -9,6 +9,6 @@ router
   .patch('/update/:id', historiesController.updateHistory)
   .delete('/:id', historiesController.deleteHistory)
   .post('/', historiesController.insertHistory)
-//   .post('/transfer/:id', transfer.transfer)
+  .post('/transfer/:id', transfer.transfer)
 
 module.exports = router
