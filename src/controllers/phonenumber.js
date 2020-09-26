@@ -19,8 +19,9 @@ const phonenumbers = {
   getAllphone: (req, res) => {
     const idUser = req.query.idUser
     const priority = req.query.priority
+    const phone = req.query.phone
 
-    phoneModels.getAllphone(idUser, priority)
+    phoneModels.getAllphone(idUser, priority, phone)
       .then((result) => {
         if (result != '') {
           helpers.response(res, null, result, 200, null)

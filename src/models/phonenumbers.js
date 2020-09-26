@@ -13,8 +13,9 @@ const phonenumbers = {
     })
   },
 
-  getAllphone: (idUser, priority) => {
+  getAllphone: (idUser, priority, phone) => {
     let user = ''
+    let serachPhone = ''
 
     if (idUser) {
       if (priority) {
@@ -24,8 +25,12 @@ const phonenumbers = {
       }
     }
 
+    if (phone) {
+      serachPhone = `WHERE phonenumbers.phoneNumber=${phone} `
+    }
+
     return new Promise((resolve, reject) => {
-      connection.query(`SELECT * FROM users INNER JOIN phonenumbers ON users.id = phonenumbers.idUser ${user}`, (err, result) => {
+      connection.query(`SELECT * FROM users INNER JOIN phonenumbers ON users.id = phonenumbers.idUser ${user} ${serachPhone}`, (err, result) => {
         if (!err) {
           resolve(result)
         } else {
@@ -92,9 +97,29 @@ const phonenumbers = {
 
   insertPhone: (data) => {
     return new Promise((resolve, reject) => {
-      connection.query('INSERT INTO phonenumbers SET ?', data, (err, result) => {
+      connection.query(`SELECT * FROM users INNER JOIN phonenumbers ON users.id = phonenumbers.idUser WHERE phonenumbers.idUser = ${data.idUser}`, (err, result) => {
         if (!err) {
-          resolve('Add phone number success')
+          if (result.length < 2) {
+            connection.query(`SELECT * FROM users INNER JOIN phonenumbers ON users.id = phonenumbers.idUser WHERE phonenumbers.phoneNumber = ${data.phoneNumber}`, (err, result) => {
+              if (!err) {
+                if (result.length < 1) {
+                  connection.query('INSERT INTO phonenumbers SET ?', data, (err, result) => {
+                    if (!err) {
+                      resolve('Add phone number success')
+                    } else {
+                      reject(new Error(err))
+                    }
+                  })
+                } else {
+                  resolve('Number already axis')
+                }
+              } else {
+                reject(new Error(err))
+              }
+            })
+          } else {
+            resolve('Max 2 phone number ')
+          }
         } else {
           reject(new Error(err))
         }
