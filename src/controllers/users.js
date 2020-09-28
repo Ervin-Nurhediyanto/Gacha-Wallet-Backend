@@ -12,7 +12,8 @@ module.exports = {
       username,
       email,
       password,
-      roleId: 2
+      roleId: 2,
+      saldo: 0
     }
 
     bcrypt.genSalt(10, function (_err, salt) {
