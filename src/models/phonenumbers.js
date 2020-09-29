@@ -19,14 +19,14 @@ const phonenumbers = {
 
     if (idUser) {
       if (priority) {
-        user = `WHERE phonenumbers.idUser=${idUser} and phonenumbers.priority=${priority}`
+        user = `WHERE phonenumbers.idUser=${idUser} AND phonenumbers.priority=${priority}`
       } else {
         user = `WHERE phonenumbers.idUser=${idUser}`
       }
     }
 
     if (phone) {
-      serachPhone = `WHERE phonenumbers.phoneNumber=${phone} `
+      serachPhone = `WHERE phonenumbers.phoneNumber LIKE '%${phone}%' OR users.username LIKE '%${phone}%' OR users.firstName LIKE '%${phone}%' OR users.lastName LIKE '%${phone}%'`
     }
 
     return new Promise((resolve, reject) => {
