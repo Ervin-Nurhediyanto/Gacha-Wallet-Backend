@@ -119,6 +119,26 @@ module.exports = {
       })
   },
 
+  updateImage: (req, res) => {
+    const id = req.params.id
+
+    const data = {
+      image: req.files.map((item) => {
+        return process.env.BASE_URL + 'uploads/' + item.filename
+      }).join()
+    }
+
+    modelUser.updateUser(id, data)
+      .then((result) => {
+        const resultProducts = result
+        console.log(result)
+        helpers.response(res, null, resultProducts, 200, null)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  },
+
   getUserById: (req, res) => {
     const id = req.params.id
     modelUser.getUserById(id)

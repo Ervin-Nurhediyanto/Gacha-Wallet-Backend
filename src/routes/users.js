@@ -12,6 +12,7 @@ router
   .post('/forgotpassword', userForgot.forgotPass)
   .patch('/resetpassword/:id', userController.resetPassword)
   .patch('/update/:id', upload, userController.updateUser)
+  .patch('/updateImage/:id', upload, userController.updateImage)
   .patch('/setpin/:id', userController.setPin)
   .patch('/pinOTP/:id', userOTP.pinOTP)
   .post('/confirmpin/:id', userController.confirmPin)

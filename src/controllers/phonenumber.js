@@ -41,9 +41,7 @@ const phonenumbers = {
     }
     phoneModels.updatePhone(id, data)
       .then((result) => {
-        const resultChats = result
-        console.log(result)
-        helpers.response(res, null, resultChats, 200, null)
+        helpers.response(res, null, result, 200, null)
       })
       .catch((err) => {
         console.log(err)
